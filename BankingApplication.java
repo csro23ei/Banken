@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
-public class BankingApplication{
-    public static void main(String[]args) {
+public class BankingApplication {
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         BankAccount bank1 = new BankAccount("Janne", "42");
         bank1.showMenu();
@@ -9,76 +9,58 @@ public class BankingApplication{
     }
 
 }
-class BankAccount{
-       int balance;
-       int previousTransaction;
 
-       String customerName;
-       String customerId;
+class BankAccount {
+    int balance;
+    int previousTransaction;
 
+    String customerName;
+    String customerId;
 
-       BankAccount(String cname, String cid){
+    BankAccount(String cname, String cid) {
         customerName = cname;
         customerId = cid;
-       }
-       
-       void deposit(int amount){
-
-        if(amount != 0){
-            balance = balance +amount;
-
-            if(amount > 0){
-                previousTransaction = amount;
-            }
-            else if(amount < 0){
-                System.out.println("I dena funkonen kan du inte ta ut pengar");
-            }
-            else{
-                System.out.println("Det funkar inte försök igen");
-            }
-      
-            
-
-        } 
-
     }
 
-    void withdraw(int amount){
-        if (amount != 0){
-            balance = balance - amount;
-             if(amount < 0){
-                previousTransaction = amount;
-            }
-            else if(amount > 0){
-                System.out.println("Du kan inte lägga till pengar här");
-            }
-            else{
-                System.out.println("Det funkar inte försök igen");
-            }
-            previousTransaction = -amount;
-            
+    void deposit(int amount) {
+        if (amount > 0) { // Only allow positive deposits
+            balance = balance + amount;
+            previousTransaction = amount;
+        } else {
+            System.out.println("Du kan inte lägga till pengar här");
         }
     }
 
-    void getPreviousTransaction(){
-        if (previousTransaction >0){
-            System.out.println("Deposited: "+ previousTransaction);
+    void withdraw(int amount) {
+        if (amount > 0) { // Only allow positive withdrawals
+            if (balance >= amount) {
+                balance = balance - amount;
+                previousTransaction = -amount;
+            } else {
+                System.out.println("Otillräckligt saldo för uttag.");
+            }
+        } else {
+            System.out.println("Du kan inte ta ut mindre än noll kr");
         }
-        else if(previousTransaction <0 ){
-            System.out.println("Withdrawn: "+ Math.abs(previousTransaction));
-        }
-        else{
+    }
+
+    void getPreviousTransaction() {
+        if (previousTransaction > 0) {
+            System.out.println("Deposited: " + previousTransaction);
+        } else if (previousTransaction < 0) {
+            System.out.println("Withdrawn: " + Math.abs(previousTransaction));
+        } else {
             System.out.println("no transaction is occured");
         }
 
     }
 
-    void showMenu(){
-        char option='\0';
-        Scanner sc =new Scanner(System.in);
+    void showMenu() {
+        char option = '\0';
+        Scanner sc = new Scanner(System.in);
 
         System.out.println("Välkommen " + customerName);
-        System.out.println("Your ID is: "+ customerId);
+        System.out.println("Your ID is: " + customerId);
         System.out.println();
         System.out.println("A. Balance");
         System.out.println("B. Lägga in pengar");
@@ -86,56 +68,54 @@ class BankAccount{
         System.out.println("D. Titigare transaktioner");
         System.out.println("E. Exit");
 
-
-        do{
+        do {
             System.out.println("===============================");
             System.out.println("Vad vill du göra idag");
             System.out.println("===============================");
             option = sc.next().charAt(0);
-            
 
-            switch(option){
+            switch (option) {
                 case 'A', 'a':
-                System.out.println("===============================");
-                System.out.println("Du har "+ balance +"kr");
-                System.out.println("===============================");
-                System.out.println();
-                break;
+                    System.out.println("===============================");
+                    System.out.println("Du har " + balance + "kr");
+                    System.out.println("===============================");
+                    System.out.println();
+                    break;
 
                 case 'B', 'b':
-                System.out.println("===============================");
-                System.out.println("Hur mycket vill du lägga in? ");
-                System.out.println("===============================");
-                int belopp = sc.nextInt();
+                    System.out.println("===============================");
+                    System.out.println("Hur mycket vill du lägga in? ");
+                    System.out.println("===============================");
+                    int belopp = sc.nextInt();
 
-                deposit(belopp);
-                System.out.println();
-                break;
+                    deposit(belopp);
+                    System.out.println();
+                    break;
 
-                case 'C','c':
-                System.out.println("===============================");
-                System.out.println("Hur mycket vill du ta ut?");
-                System.out.println("===============================");
-                int belopp2 =sc.nextInt();
-                withdraw(belopp2);
-                System.out.println();
-                break;
+                case 'C', 'c':
+                    System.out.println("===============================");
+                    System.out.println("Hur mycket vill du ta ut?");
+                    System.out.println("===============================");
+                    int belopp2 = sc.nextInt();
+                    withdraw(belopp2);
+                    System.out.println();
+                    break;
 
-                case 'D','d':
-                System.out.println("===============================");
-                getPreviousTransaction();
-                System.out.println("===============================");
-                System.out.println();
-                break;
+                case 'D', 'd':
+                    System.out.println("===============================");
+                    getPreviousTransaction();
+                    System.out.println("===============================");
+                    System.out.println();
+                    break;
 
-                case 'E','e':
-                System.out.println("===============================");
-                break;
+                case 'E', 'e':
+                    System.out.println("===============================");
+                    break;
 
                 default:
-                System.out.println("Invalid Option! Pleas try again");
-                break;
+                    System.out.println("Invalid Option! Pleas try again");
+                    break;
             }
-        }while (option != 'E');
+        } while (option != 'E');
     }
 }
